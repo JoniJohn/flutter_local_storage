@@ -15,3 +15,6 @@ key systems:
 
 - get: for managing routes and state
 - sqflite_common_ffi: for our local database
+
+## Next Models
+- Location
