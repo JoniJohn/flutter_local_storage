@@ -1,16 +1,15 @@
 class Contact {
   int? id;
-  String? name;
+  // can be options between 'mobile/direct/personal/workemail?'
   String? description;
   int? numbers;
   int? emails;
 
-  Contact(this.name, this.description, this.numbers, this.emails);
+  Contact(this.description, this.numbers, this.emails);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
 
-    map['contact_name'] = name;
     map['description'] = description;
     map['phone_numbers'] = numbers;
     map['email_addresses'] = emails;
@@ -21,7 +20,6 @@ class Contact {
 
   Contact.fromObject(dynamic obj) {
     id = obj['id'];
-    name = obj['contact_name'];
     description = obj['description'];
     numbers = obj['phone_numbers'];
     emails = obj['email_addresses'];

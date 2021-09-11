@@ -1,5 +1,6 @@
 class EmailAddress {
   int? id;
+  String? desc;
   String? address;
 
   EmailAddress(this.address);
@@ -7,6 +8,7 @@ class EmailAddress {
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
 
+    map['description'] = desc;
     map['email_address'] = address;
     if (id != null) map['id'] = id;
 
@@ -15,6 +17,7 @@ class EmailAddress {
 
   EmailAddress.fromObject(dynamic obj) {
     id = obj['id'];
+    desc = obj['description'];
     address = obj['address'];
   }
 }
