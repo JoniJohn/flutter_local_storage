@@ -4,12 +4,17 @@ A minimal flutter test driven project that demonstrates the use of SQFlite for s
 
 ## Getting Started
 
-we will explore a company database
+We explore a company database
+A system where company employees [agents] are users
+No authentication for simplicity reasons
 key systems:
-    - Company [Bank]
+    - Company [Organization]
     - Employee [Agent]
 
 ## Main Packages
 
 - get: for managing routes and state
 - sqflite_common_ffi: for our local database
+
+## Next Models
+- Location
