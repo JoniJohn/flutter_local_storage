@@ -42,14 +42,48 @@ class DBStrings {
     CONSTRAINT fk_dept2 FOREIGN KEY (below_dept_id) REFERENCES department(id) ON DELETE CASCADE,
   );
   ''';
-  String companyPhone = '';
-  String companyEmail = '';
-  String deptPhone = '';
-  String deptEmail = '';
+  String companyPhone = '''
+  create table companyPhone(
+    id INTEGER PRIMARY KEY,
+    company_id INTEGER NOT NULL,
+    phone_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id),
+    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id)
+  );
+  ''';
+  String companyEmail = '''
+  create table companyEmail(
+    id INTEGER PRIMARY KEY,
+    company_id INTEGER NOT NULL,
+    email_id INTEGER NOT NULL,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id),
+    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id)
+  );
+  ''';
+  String deptPhone = '''
+  create table deptPhone(
+    id INTEGER PRIMARY KEY,
+    company_id INTEGER NOT NULL,
+    phone_id INTEGER NOT NULL,
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES dept(id),
+    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id)
+  );
+  ''';
+  String deptEmail = '''
+  create table deptEmail(
+    id INTEGER PRIMARY KEY,
+    dept_id INTEGER NOT NULL,
+    email_id INTEGER NOT NULL,
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES dept(id),
+    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id)
+  );
+  ''';
 
   // role and title
-  String role = '';
-  String title = '';
+  String role = '''
+  ''';
+  String title = '''
+  ''';
 
   // agent Strings
   String agent = '''
@@ -64,10 +98,14 @@ class DBStrings {
     CONSTRAINT gender_check CHECK(gender = 'M' or gender = 'F' or gender = 'O')
   );
   ''';
-  String agentPhone = '';
-  String agentEmail = '';
-  String agentRole = '';
-  String agentTitle = '';
+  String agentPhone = '''
+  ''';
+  String agentEmail = '''
+  ''';
+  String agentRole = '''
+  ''';
+  String agentTitle = '''
+  ''';
 
   List<String> get contactQuries => [phone, email];
   List<String> get companyQueries => [
