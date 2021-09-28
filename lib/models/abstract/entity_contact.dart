@@ -2,6 +2,7 @@ abstract class EntityContact {
   EntityContact(this.entity, this.contact);
 
   abstract String entityFieldName;
+  abstract String contactFieldName;
 
   int? id;
   int? entity;
@@ -11,7 +12,7 @@ abstract class EntityContact {
     var map = <String, dynamic>{};
 
     map[entityFieldName] = entity;
-    map['contact_id'] = contact;
+    map[contactFieldName] = contact;
     if (id != null) map['id'] = id;
 
     return map;
@@ -20,6 +21,6 @@ abstract class EntityContact {
   EntityContact.fromObject(dynamic obj) {
     id = obj['id'];
     entity = obj[entityFieldName];
-    contact = obj['contact_id'];
+    contact = obj[contactFieldName];
   }
 }
