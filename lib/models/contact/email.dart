@@ -9,7 +9,7 @@ class EmailAddress {
     var map = <String, dynamic>{};
 
     map['description'] = desc;
-    map['email_address'] = address;
+    map['address'] = address;
     if (id != null) map['id'] = id;
 
     return map;

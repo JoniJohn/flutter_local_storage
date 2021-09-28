@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'views/home_page.dart';
 
 void main() {
+  sqfliteFfiInit();
   runApp(const App());
 }
 

@@ -11,7 +11,7 @@ class Company {
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
 
-    map['company_name'] = name;
+    map['name'] = name;
     map['country'] = country;
     if (id != null) map['company_id'] = id;
 
@@ -20,7 +20,7 @@ class Company {
 
   Company.fromObject(dynamic obj) {
     id = obj['id'];
-    name = obj['company_name'];
+    name = obj['name'];
     country = obj['country'];
   }
 }

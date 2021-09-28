@@ -11,7 +11,7 @@ class Department {
 
     map['name'] = name;
     map['description'] = desc;
-    map['company'] = company;
+    map['company_id'] = company;
     if (id != null) map['id'] = id;
 
     return map;
@@ -21,6 +21,6 @@ class Department {
     id = obj['id'];
     name = obj['name'];
     desc = obj['description'];
-    company = obj['company'];
+    company = obj['company_id'];
   }
 }
