@@ -39,7 +39,7 @@ class DBStrings {
     above_dept_id INTEGER NOT NULL,
     below_dept_id INTEGER NOT NULL,
     CONSTRAINT fk_dept1 FOREIGN KEY (above_dept_id) REFERENCES department(id) ON DELETE CASCADE,
-    CONSTRAINT fk_dept2 FOREIGN KEY (below_dept_id) REFERENCES department(id) ON DELETE CASCADE,
+    CONSTRAINT fk_dept2 FOREIGN KEY (below_dept_id) REFERENCES department(id) ON DELETE CASCADE
   );
   ''';
   String companyPhone = '''
@@ -47,8 +47,8 @@ class DBStrings {
     id INTEGER PRIMARY KEY,
     company_id INTEGER NOT NULL,
     phone_id INTEGER NOT NULL,
-    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id),
-    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id)
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE,
+    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id) ON DELETE CASCADE
   );
   ''';
   String companyEmail = '''
@@ -56,17 +56,17 @@ class DBStrings {
     id INTEGER PRIMARY KEY,
     company_id INTEGER NOT NULL,
     email_id INTEGER NOT NULL,
-    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id),
-    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id)
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE,
+    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id) ON DELETE CASCADE
   );
   ''';
   String deptPhone = '''
   create table deptPhone(
     id INTEGER PRIMARY KEY,
-    company_id INTEGER NOT NULL,
+    dept_id INTEGER NOT NULL,
     phone_id INTEGER NOT NULL,
-    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES dept(id),
-    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id)
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES department(id) ON DELETE CASCADE,
+    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id) ON DELETE CASCADE
   );
   ''';
   String deptEmail = '''
@@ -74,8 +74,8 @@ class DBStrings {
     id INTEGER PRIMARY KEY,
     dept_id INTEGER NOT NULL,
     email_id INTEGER NOT NULL,
-    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES dept(id),
-    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id)
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES department(id) ON DELETE CASCADE,
+    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id) ON DELETE CASCADE
   );
   ''';
 
@@ -99,8 +99,22 @@ class DBStrings {
   );
   ''';
   String agentPhone = '''
+  create table agentPhone(
+    id INTEGER PRIMARY KEY,
+    agent_id INTEGER NOT NULL,
+    phone_id INTEGER NOT NULL,
+    CONSTRAINT fk_agent FOREIGN KEY (agent_id) REFERENCES agent(id) ON DELETE CASCADE, 
+    CONSTRAINT fk_phone FOREIGN KEY (phone_id) REFERENCES phone(id) ON DELETE CASCADE
+  );
   ''';
   String agentEmail = '''
+  create table agentEmail(
+    id INTEGER PRIMARY KEY,
+    agent_id INTEGER NOT NULL,
+    email_id INTEGER NOT NULL,
+    CONSTRAINT fk_agent FOREIGN KEY (agent_id) REFERENCES agent(id) ON DELETE CASCADE, 
+    CONSTRAINT fk_email FOREIGN KEY (email_id) REFERENCES email(id) ON DELETE CASCADE
+  );
   ''';
   String agentRole = '''
   ''';
