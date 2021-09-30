@@ -1,10 +1,16 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/db/db_strings.dart';
 import 'package:local_storage/models/agent/agent.dart';
+import 'package:local_storage/models/agent/agent_contact.dart';
 import 'package:local_storage/models/contact/email.dart';
 import 'package:local_storage/models/contact/phone.dart';
 import 'package:local_storage/models/organization/company.dart';
+import 'package:local_storage/models/organization/company_contact.dart';
 import 'package:local_storage/models/organization/department.dart';
+import 'package:local_storage/models/organization/dept_contacts.dart';
+import 'package:local_storage/models/organization/dept_dept.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -155,6 +161,237 @@ Future main() async {
           }
         ],
       );
+
+      dbhelper.close();
+    });
+
+    test('Department Relation test', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().deptDept);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('FMB', 'BW');
+      Department departmentAbove = Department('Operations', 'Ops', 1);
+      Department departmentBelow = Department('CPC', 'Account Opening', 1);
+      DeptDept dept = DeptDept(1, 2);
+
+      // act
+      await dbhelper.insert('company', company.toMap());
+      await dbhelper.insert('department', departmentAbove.toMap());
+      await dbhelper.insert('department', departmentBelow.toMap());
+      await dbhelper.insert('deptdept', dept.toMap());
+
+      // assert
+      expect(await dbhelper.query('deptdept'), [
+        {
+          'id': 1,
+          'above_dept_id': 1,
+          'below_dept_id': 2,
+        }
+      ]);
+      dbhelper.close();
+    });
+
+    test('Company Phone', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().phone);
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().companyPhone);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('FMB', 'BW');
+      Phone phone = Phone('267', 'ext', '71727374');
+      CompanyNumber companyNumber = CompanyNumber(1, 1);
+
+      // act
+      await dbhelper.insert('phone', phone.toMap());
+      await dbhelper.insert('company', company.toMap());
+      await dbhelper.insert('companyPhone', companyNumber.toMap());
+
+      // assert
+      expect(await dbhelper.query('companyPhone'), [
+        {
+          'id': 1,
+          'company_id': 1,
+          'phone_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Company Email', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().email);
+        await db.execute(DBStrings().companyEmail);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('FMB', 'BW');
+      EmailAddress emailAddress = EmailAddress('whosekid@gmail.com');
+      CompanyEmail companyEmail = CompanyEmail(1, 1);
+
+      // act
+      await dbhelper.insert('company', company.toMap());
+      await dbhelper.insert('email', emailAddress.toMap());
+      await dbhelper.insert('companyEmail', companyEmail.toMap());
+
+      // assert
+      expect(await dbhelper.query('companyEmail'), [
+        {
+          'id': 1,
+          'company_id': 1,
+          'email_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Department Phone', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().phone);
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().deptPhone);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Phone phone = Phone('267', 'main', '71727374');
+      Company company = Company('FMB', 'BW');
+      Department department = Department('IT', 'Technical Issues', 1);
+      DeptNumber deptNumber = DeptNumber(1, 1);
+
+      // act
+      await dbhelper.insert('phone', phone.toMap());
+      await dbhelper.insert('company', company.toMap());
+      await dbhelper.insert('department', department.toMap());
+      await dbhelper.insert('deptPhone', deptNumber.toMap());
+
+      // assert
+      expect(await dbhelper.query('deptPhone'), [
+        {
+          'id': 1,
+          'dept_id': 1,
+          'phone_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Department Email', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().email);
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().deptEmail);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      EmailAddress emailAddress = EmailAddress('kid@gmail.com');
+      Company company = Company('FMB', 'BW');
+      Department department = Department('IT', 'Short desc', 1);
+      DeptEmail deptEmail = DeptEmail(1, 1);
+
+      // act
+      await dbhelper.insert('email', emailAddress.toMap());
+      await dbhelper.insert('company', company.toMap());
+      await dbhelper.insert('department', department.toMap());
+      await dbhelper.insert('deptEmail', deptEmail.toMap());
+
+      // assert
+      expect(await dbhelper.query('deptEmail'), [
+        {
+          'id': 1,
+          'dept_id': 1,
+          'email_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Agent Phone', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().agent);
+        await db.execute(DBStrings().phone);
+        await db.execute(DBStrings().agentPhone);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Agent agent = Agent('DR', 'firstname', 'middlenames', 'lastname', 1, 'M');
+      Phone phone = Phone('000', 'main', '71727374');
+      AgentNumber agentNumber = AgentNumber(1, 1);
+
+      // act
+      await dbhelper.insert('agent', agent.toMap());
+      await dbhelper.insert('phone', phone.toMap());
+      await dbhelper.insert('agentPhone', agentNumber.toMap());
+
+      // assert
+      expect(await dbhelper.query('agentPhone'), [
+        {
+          'id': 1,
+          'agent_id': 1,
+          'phone_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Agent Email', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().agent);
+        await db.execute(DBStrings().email);
+        await db.execute(DBStrings().agentEmail);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Agent agent = Agent('DR', 'firstname', 'middlenames', 'lastname', 1, 'M');
+      EmailAddress emailAddress = EmailAddress('kid@gmail.com');
+      AgentEmail agentEmail = AgentEmail(1, 1);
+
+      // act
+      await dbhelper.insert('agent', agent.toMap());
+      await dbhelper.insert('email', emailAddress.toMap());
+      await dbhelper.insert('agentEmail', agentEmail.toMap());
+
+      // assert
+      expect(await dbhelper.query('agentEmail'), [
+        {
+          'id': 1,
+          'agent_id': 1,
+          'email_id': 1,
+        }
+      ]);
 
       dbhelper.close();
     });
