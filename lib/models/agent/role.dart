@@ -4,7 +4,7 @@ class Role {
   String? desc;
   int? dept; // foreign key to department
 
-  Role(this.name, this.desc);
+  Role(this.name, this.desc, this.dept);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
