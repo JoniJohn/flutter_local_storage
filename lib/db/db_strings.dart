@@ -81,8 +81,20 @@ class DBStrings {
 
   // role and title
   String role = '''
+  create table role(
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    dept_id INTEGER NOT NULL,
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES department(id)
+  );
   ''';
   String title = '''
+  create table jobTitle(
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL
+  );
   ''';
 
   // agent Strings
@@ -117,8 +129,30 @@ class DBStrings {
   );
   ''';
   String agentRole = '''
+  create table agentRole(
+    id INTEGER PRIMARY KEY,
+    role_id INTEGER NOT NULL,
+    agent_id INTEGER NOT NULL,
+    start_date TEXT NOT NULL,
+    end_date TEXT,
+    reason TEXT,
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
+    CONSTRAINT fk_agent FOREIGN KEY (agent_id) REFERENCES agent(id) ON DELETE CASCADE
+  );
   ''';
   String agentTitle = '''
+  create table agentTitle(
+    id INTEGER PRIMARY KEY,
+    agent_id INTEGER NOT NULL,
+    dept_id INTEGER NOT NULL,
+    title_id INTEGER NOT NULL,
+    start_date TEXT NOT NULL,
+    end_date TEXT,
+    reason TEXT,
+    CONSTRAINT fk_agent FOREIGN KEY (agent_id) REFERENCES agent(id) ON DELETE CASCADE,
+    CONSTRAINT fk_dept FOREIGN KEY (dept_id) REFERENCES department(id) ON DELETE CASCADE,
+    CONSTRAINT fk_title FOREIGN KEY (title_id) REFERENCES jobTitle(id) ON DELETE CASCADE
+  );
   ''';
 
   List<String> get contactQuries => [phone, email];

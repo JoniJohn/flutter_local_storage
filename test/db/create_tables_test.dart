@@ -4,6 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/db/db_strings.dart';
 import 'package:local_storage/models/agent/agent.dart';
 import 'package:local_storage/models/agent/agent_contact.dart';
+import 'package:local_storage/models/agent/agent_role.dart';
+import 'package:local_storage/models/agent/agent_title.dart';
+import 'package:local_storage/models/agent/role.dart';
+import 'package:local_storage/models/agent/title.dart';
 import 'package:local_storage/models/contact/email.dart';
 import 'package:local_storage/models/contact/phone.dart';
 import 'package:local_storage/models/organization/company.dart';
@@ -390,6 +394,149 @@ Future main() async {
           'id': 1,
           'agent_id': 1,
           'email_id': 1,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Role', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().role);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('name', 'BW');
+      var resCo = await dbhelper.insert('company', company.toMap());
+      Department department = Department('IT', 'desc', resCo);
+      var resDept = await dbhelper.insert('department', department.toMap());
+      Role role = Role('name', 'desc', resDept);
+
+      // act
+      await dbhelper.insert('role', role.toMap());
+
+      // assert
+      expect(await dbhelper.query('role'), [
+        {
+          'id': 1,
+          'name': role.name,
+          'description': role.desc,
+          'dept_id': role.dept,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Title', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().title);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      JobTitle title = JobTitle('officer', 'desc');
+
+      // act
+      await dbhelper.insert('jobTitle', title.toMap());
+
+      // assert
+      expect(await dbhelper.query('jobTitle'), [
+        {
+          'id': 1,
+          'name': title.name,
+          'description': title.desc,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Agent Role', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().role);
+        await db.execute(DBStrings().agent);
+        await db.execute(DBStrings().agentRole);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('name', 'country');
+      var companyID = await dbhelper.insert('company', company.toMap());
+      Department department = Department('name', 'desc', companyID);
+      var deptID = await dbhelper.insert('department', department.toMap());
+      Role role = Role('name', 'desc', deptID);
+      var roleID = await dbhelper.insert('role', role.toMap());
+      Agent agent = Agent('DR', 'firstname', 'middlenames', 'lastname', 1, 'M');
+      var agentID = await dbhelper.insert('agent', agent.toMap());
+      AgentRole agentRole = AgentRole(agentID, roleID, '23.01.2021');
+
+      // act
+      await dbhelper.insert('agentRole', agentRole.toMap());
+
+      // assert
+      expect(await dbhelper.query('agentRole'), [
+        {
+          'id': 1,
+          'role_id': agentRole.role,
+          'agent_id': agentRole.agent,
+          'start_date': agentRole.start,
+          'end_date': agentRole.end,
+          'reason': agentRole.reason,
+        }
+      ]);
+
+      dbhelper.close();
+    });
+
+    test('Agent Job Title', () async {
+      var dbhelper = await openDatabase(inMemoryDatabasePath, version: 1,
+          onCreate: (db, version) async {
+        await db.execute(DBStrings().company);
+        await db.execute(DBStrings().department);
+        await db.execute(DBStrings().title);
+        await db.execute(DBStrings().agent);
+        await db.execute(DBStrings().agentTitle);
+      }, onConfigure: (db) async {
+        await db.execute("PRAGMA foreign_keys = ON");
+      });
+
+      // arrange
+      Company company = Company('name', 'country');
+      var companyID = await dbhelper.insert('company', company.toMap());
+      Department department = Department('name', 'desc', companyID);
+      var deptID = await dbhelper.insert('department', department.toMap());
+      JobTitle title = JobTitle('officer', 'desc');
+      var titleID = await dbhelper.insert('jobTitle', title.toMap());
+      Agent agent = Agent('DR', 'firstname', 'middlenames', 'lastname', 1, 'M');
+      var agentID = await dbhelper.insert('agent', agent.toMap());
+      AgentTitle agentTitle =
+          AgentTitle(agentID, deptID, titleID, '23.01.2021');
+
+      // act
+      await dbhelper.insert('agentTitle', agentTitle.toMap());
+
+      // assert
+      expect(await dbhelper.query('agentTitle'), [
+        {
+          'id': 1,
+          'agent_id': agentTitle.agent,
+          'dept_id': agentTitle.dept,
+          'title_id': agentTitle.title,
+          'start_date': agentTitle.start,
+          'end_date': agentTitle.end,
+          'reason': agentTitle.reason,
         }
       ]);
 
