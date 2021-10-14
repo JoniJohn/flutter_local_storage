@@ -8,6 +8,7 @@ import 'package:local_storage/models/contact/phone.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+// Below we use functions setUp and tearDown to avoid repeating code
 Future main() async {
   setUpAll(() {
     sqfliteFfiInit();
@@ -18,7 +19,7 @@ Future main() async {
 
   var dbhelper, db;
 
-  // before every test
+  // before every test we create a database
   setUp(() {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
         onCreate: (db, version) async {
@@ -29,7 +30,7 @@ Future main() async {
     db = DBBasicQuiries(db: dbhelper);
   });
 
-// after every test
+// after every test we close the db
   tearDown(() async {
     await db.close();
   });
@@ -42,8 +43,6 @@ Future main() async {
     test('Create EmailAddress', () async {
       // assert
       expect(await db.insertEmail(email), 1);
-
-      // await db.close();
     });
     test('Read Phones', () async {
       // arrange
@@ -55,8 +54,6 @@ Future main() async {
       // assert
       expect(res.length, 1);
       expect(res[0].name, phone.name);
-
-      // await db.close();
     });
     test('Read EmailAddresses', () async {
       // arrange
