@@ -1,5 +1,6 @@
 import 'package:local_storage/models/contact/email.dart';
 import 'package:local_storage/models/contact/phone.dart';
+import 'package:local_storage/models/organization/company.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBBasicQuiries {
@@ -88,5 +89,30 @@ class DBBasicQuiries {
   Future<void> close() async {
     Database db = await this.db;
     db.close();
+  }
+
+  // Company
+  // insert
+  Future<int> insertCompany(Company company) async {
+    return 0;
+  }
+
+  // read
+  Future<Company> getCompanyByID(int id) async {
+    return Company(null, null);
+  }
+
+  Future<List<Company>> getCompanies() async {
+    return [];
+  }
+
+  // update
+  Future<int> updateCompany(Company company) async {
+    return 0;
+  }
+
+  // delete
+  Future<int> deleteCompany(int id) async {
+    return 0;
   }
 }
