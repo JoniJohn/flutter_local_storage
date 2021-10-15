@@ -1,6 +1,7 @@
 import 'package:local_storage/models/contact/email.dart';
 import 'package:local_storage/models/contact/phone.dart';
 import 'package:local_storage/models/organization/company.dart';
+import 'package:local_storage/models/organization/department.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBBasicQuiries {
@@ -94,25 +95,66 @@ class DBBasicQuiries {
   // Company
   // insert
   Future<int> insertCompany(Company company) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.insert('company', company.toMap());
+    return res;
   }
 
   // read
   Future<Company> getCompanyByID(int id) async {
-    return Company(null, null);
+    Database db = await this.db;
+    var res = await db.query('company', where: "id = ?", whereArgs: [id]);
+    List<Company> companies = res.map((e) => Company.fromObject(e)).toList();
+    return companies.first;
   }
 
   Future<List<Company>> getCompanies() async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('company');
+    List<Company> companies = res.map((e) => Company.fromObject(e)).toList();
+    return companies;
   }
 
   // update
   Future<int> updateCompany(Company company) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.update('company', company.toMap());
+    return res;
   }
 
   // delete
   Future<int> deleteCompany(int id) async {
+    Database db = await this.db;
+    var res = await db.delete('company', where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
+
+  // Department
+  // Create
+  Future<int> insertDept(Department dept) async {
+    return 0;
+  }
+
+  // read
+  Future<Department> getDeptByID(int id) async {
+    return Department(null, null, null);
+  }
+
+  Future<List<Department>> getDeptsByCoID(int id) async {
+    return [];
+  }
+
+  Future<List<Department>> getDepts() async {
+    return [];
+  }
+
+  // update
+  Future<int> updateDept(Department dept) async {
+    return 0;
+  }
+
+  // delete
+  Future<int> deleteDept(int id) async {
     return 0;
   }
 }

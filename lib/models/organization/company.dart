@@ -13,7 +13,7 @@ class Company {
 
     map['name'] = name;
     map['country'] = country;
-    if (id != null) map['company_id'] = id;
+    if (id != null) map['id'] = id;
 
     return map;
   }
