@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/db/db_basic_quries.dart';
 import 'package:local_storage/db/db_strings.dart';
@@ -16,7 +14,9 @@ Future main() async {
 
   Company company = Company('Flutter Co', 'BW');
   Department dept = Department('IT Dept', 'For your Support', null);
-  var dbhelper, db, res;
+  late Future<Database> dbhelper;
+  late DBBasicQuiries db;
+  late int res;
 
   setUp(() async {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
@@ -88,7 +88,7 @@ Future main() async {
       var department = await db.getDeptByID(100);
 
       // assert
-      expect(department, null);
+      expect(department, []);
 
       // arrange
       var id = await db.insertDept(dept);
@@ -97,7 +97,7 @@ Future main() async {
       department = await db.getDeptByID(id);
 
       // assert
-      expect(department.toMap(), {
+      expect(department.first.toMap(), {
         'id': id,
         'name': dept.name,
         'description': dept.desc,
@@ -105,19 +105,29 @@ Future main() async {
       });
     });
     test('Update Deparment', () async {
+      // update when there is no record
+      Department updated = dept;
+      updated.id = 1;
+      updated.name = 'New Name';
+      updated.desc = 'New Desc';
+      // act
+      var response = await db.updateDept(updated);
+      // assert
+      expect(response, 0);
+
       // arrange
       var id = await db.insertDept(dept);
-      Department updated = dept;
+      updated = dept;
       updated.id = id;
       updated.name = 'New Name';
       updated.desc = 'New Desc';
 
       // act
-      var response = await db.updateDept(updated);
+      response = await db.updateDept(updated);
 
       // assert
       expect(response, 1);
-      expect((await db.getDeptByID(id)).toMap(), {
+      expect((await db.getDeptByID(id)).first.toMap(), {
         'id': id,
         'name': updated.name,
         'description': updated.desc,

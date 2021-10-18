@@ -12,7 +12,8 @@ Future main() async {
   });
   Company company = Company('Flutter Co', 'BW');
 
-  var dbhelper, db;
+  late Future<Database> dbhelper;
+  late DBBasicQuiries db;
 
   setUp(() {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,

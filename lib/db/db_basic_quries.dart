@@ -132,29 +132,45 @@ class DBBasicQuiries {
   // Department
   // Create
   Future<int> insertDept(Department dept) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.insert('department', dept.toMap());
+    return res;
   }
 
   // read
-  Future<Department> getDeptByID(int id) async {
-    return Department(null, null, null);
+  Future<List<Department>> getDeptByID(int id) async {
+    Database db = await this.db;
+    var res = await db.query('department', where: "id = ?", whereArgs: [id]);
+    List<Department> depts = res.map((e) => Department.fromObject(e)).toList();
+    return depts;
   }
 
   Future<List<Department>> getDeptsByCoID(int id) async {
-    return [];
+    Database db = await this.db;
+    var res =
+        await db.query('department', where: "company_id = ?", whereArgs: [id]);
+    List<Department> depts = res.map((e) => Department.fromObject(e)).toList();
+    return depts;
   }
 
   Future<List<Department>> getDepts() async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('department');
+    List<Department> depts = res.map((e) => Department.fromObject(e)).toList();
+    return depts;
   }
 
   // update
   Future<int> updateDept(Department dept) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.update('department', dept.toMap());
+    return res;
   }
 
   // delete
   Future<int> deleteDept(int id) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.delete('department', where: "id = ?", whereArgs: [id]);
+    return res;
   }
 }
