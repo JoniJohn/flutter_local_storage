@@ -1,3 +1,4 @@
+import 'package:local_storage/models/agent/agent.dart';
 import 'package:local_storage/models/contact/email.dart';
 import 'package:local_storage/models/contact/phone.dart';
 import 'package:local_storage/models/organization/company.dart';
@@ -172,5 +173,30 @@ class DBBasicQuiries {
     Database db = await this.db;
     var res = await db.delete('department', where: "id = ?", whereArgs: [id]);
     return res;
+  }
+
+  // Agent CRUD
+  // create
+  Future<int> insertAgent(Agent agent) async {
+    return 0;
+  }
+
+  // read
+  Future<List<Agent>> getAgents() async {
+    return [];
+  }
+
+  Future<List<Agent>> getAgentByID(int id) async {
+    return [];
+  }
+
+  // update
+  Future<int> updateAgent(Agent agent) async {
+    return 0;
+  }
+
+  // delete
+  Future<int> deleteAgent(int id) async {
+    return 0;
   }
 }
