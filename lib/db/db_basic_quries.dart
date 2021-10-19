@@ -178,25 +178,37 @@ class DBBasicQuiries {
   // Agent CRUD
   // create
   Future<int> insertAgent(Agent agent) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.insert('agent', agent.toMap());
+    return res;
   }
 
   // read
   Future<List<Agent>> getAgents() async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('agent');
+    List<Agent> agents = res.map((e) => Agent.fromObject(e)).toList();
+    return agents;
   }
 
   Future<List<Agent>> getAgentByID(int id) async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('agent', where: "id = ?", whereArgs: [id]);
+    List<Agent> agents = res.map((e) => Agent.fromObject(e)).toList();
+    return agents;
   }
 
   // update
   Future<int> updateAgent(Agent agent) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.update('agent', agent.toMap());
+    return res;
   }
 
   // delete
   Future<int> deleteAgent(int id) async {
-    return 0;
+    Database db = await this.db;
+    var res = await db.delete('agent', where: "id = ?", whereArgs: [id]);
+    return res;
   }
 }
