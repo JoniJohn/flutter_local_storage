@@ -9,26 +9,38 @@ class TitleBasicQueries {
   // Title CRUD
   // create
   Future<int> insertJobTitle(JobTitle title) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.insert('jobTitle', title.toMap());
+    return res;
   }
 
   // read
   Future<List<JobTitle>> getJobTitles() async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('jobTitle');
+    List<JobTitle> titles = res.map((e) => JobTitle.fromObject(e)).toList();
+    return titles;
   }
 
   Future<List<JobTitle>> getJobTitleByID(int id) async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('jobTitle', where: "id = ?", whereArgs: [id]);
+    List<JobTitle> titles = res.map((e) => JobTitle.fromObject(e)).toList();
+    return titles;
   }
 
   // update
   Future<int> updateJobTitle(JobTitle title) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.update('jobTitle', title.toMap());
+    return res;
   }
 
   // delete
   Future<int> deleteJobTitle(int id) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.delete('jobTitle', where: "id = ?", whereArgs: [id]);
+    return res;
   }
 
   Future close() async {
