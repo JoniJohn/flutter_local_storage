@@ -9,30 +9,45 @@ class RoleQueries {
   // Role CRUD
   // create
   Future<int> insertRole(Role role) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.insert('role', role.toMap());
+    return res;
   }
 
   // read
   Future<List<Role>> getRoles() async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('role');
+    List<Role> roles = res.map((e) => Role.fromObject(e)).toList();
+    return roles;
   }
 
   Future<List<Role>> getRoleByID(int id) async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('role', where: "id = ?", whereArgs: [id]);
+    List<Role> roles = res.map((e) => Role.fromObject(e)).toList();
+    return roles;
   }
 
   Future<List<Role>> getRolesByDept(int id) async {
-    return [];
+    Database db = await this.db;
+    var res = await db.query('role', where: "dept_id = ?", whereArgs: [id]);
+    List<Role> roles = res.map((e) => Role.fromObject(e)).toList();
+    return roles;
   }
 
   // update
   Future<int> updateRole(Role role) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.update('role', role.toMap());
+    return res;
   }
 
   // delete
   Future<int> deleteRole(int id) async {
-    return 0;
+    Database db = await this.db;
+    int res = await db.delete('role', where: "id = ?", whereArgs: [id]);
+    return res;
   }
 
   // close
