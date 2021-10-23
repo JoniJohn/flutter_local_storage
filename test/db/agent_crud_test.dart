@@ -20,7 +20,10 @@ Future main() async {
   setUp(() async {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
         onCreate: (db, version) async {
-      DBStrings().all.forEach((query) async => await db.execute(query));
+      // DBStrings().all.forEach((query) async => await db.execute(query));
+      for (final query in DBStrings().all) {
+        await db.execute(query);
+      }
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
