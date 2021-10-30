@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/db/db_basic_quries.dart';
+import 'package:local_storage/db/contact/email_crud.dart';
 import 'package:local_storage/db/db_strings.dart';
 import 'package:local_storage/models/contact/email.dart';
-import 'package:local_storage/models/contact/phone.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -14,10 +13,11 @@ Future main() async {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   });
-  Phone phone = Phone('zip', 'name', 'number');
+
   EmailAddress email = EmailAddress('address');
 
-  var dbhelper, db;
+  late Future<Database> dbhelper;
+  late EmailCRUD db;
 
   // before every test we create a database
   setUp(() {
@@ -30,7 +30,7 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = DBBasicQuiries(db: dbhelper);
+    db = EmailCRUD(db: dbhelper);
   });
 
 // after every test we close the db
@@ -39,24 +39,9 @@ Future main() async {
   });
 
   group('Contacts Quries:', () {
-    test('Create Phone', () async {
-      // assert
-      expect(await db.insertPhone(phone), 1);
-    });
     test('Create EmailAddress', () async {
       // assert
       expect(await db.insertEmail(email), 1);
-    });
-    test('Read Phones', () async {
-      // arrange
-      await db.insertPhone(phone);
-
-      // act
-      var res = await db.getPhones();
-
-      // assert
-      expect(res.length, 1);
-      expect(res[0].name, phone.name);
     });
     test('Read EmailAddresses', () async {
       // arrange
@@ -69,18 +54,6 @@ Future main() async {
       expect(res.length, 1);
       expect(res[0].address, email.address);
     });
-    test('Read Phone', () async {
-      // arrange
-      var res = await db.insertPhone(phone);
-
-      // assert
-      expect((await db.getPhoneByID(res)).toMap(), {
-        'id': res,
-        'zip_code': phone.zip,
-        'type_name': phone.name,
-        'phone_number': phone.number,
-      });
-    });
     test('Read Email', () async {
       // arrange
       var res = await db.insertEmail(email);
@@ -92,21 +65,6 @@ Future main() async {
         'address': email.address,
       });
     });
-    test('Update Phone', () async {
-      // arrange
-      var res = await db.insertPhone(phone);
-      Phone update = Phone('newname', 'newzip', null);
-      update.name = 'newname';
-      update.zip = 'newzip';
-      update.number = 'newnumber';
-      update.id = res;
-
-      // act
-      var val = await db.updatePhone(update);
-
-      // assert
-      expect(val, 1);
-    });
     test('Update EmailAddress', () async {
       // arrange
       var res = await db.insertEmail(email);
@@ -117,17 +75,6 @@ Future main() async {
       var val = await db.updateEmailAddress(update);
 
       // assert
-      expect(val, 1);
-    });
-    test('Delete Phone', () async {
-      // arrange
-      var res = await db.insertPhone(phone);
-
-      // act
-      var val = await db.deletePhone(res);
-
-      // assert
-      // where 1 is the number of rows affected
       expect(val, 1);
     });
     test('Delete EmailAddress', () async {
