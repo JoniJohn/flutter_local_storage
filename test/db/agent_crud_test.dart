@@ -1,7 +1,7 @@
 // import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/db/db_basic_quries.dart';
+import 'package:local_storage/db/agent/agent_crud.dart';
 import 'package:local_storage/db/db_strings.dart';
 import 'package:local_storage/models/agent/agent.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,7 +15,7 @@ Future main() async {
   Agent agent =
       Agent("salutation", "firstname", "middlenames", "lastname", 1, "M");
   late Future<Database> dbhelper;
-  late DBBasicQuiries db;
+  late AgentCRUD db;
 
   setUp(() async {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
@@ -27,7 +27,7 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = DBBasicQuiries(db: dbhelper);
+    db = AgentCRUD(db: dbhelper);
   });
 
   tearDown(() async {

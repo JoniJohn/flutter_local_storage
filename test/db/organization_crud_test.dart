@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/db/db_basic_quries.dart';
 import 'package:local_storage/db/db_strings.dart';
+import 'package:local_storage/db/organization/organization_crud.dart';
 import 'package:local_storage/models/organization/company.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -13,7 +13,7 @@ Future main() async {
   Company company = Company('Flutter Co', 'BW');
 
   late Future<Database> dbhelper;
-  late DBBasicQuiries db;
+  late CompanyCRUD db;
 
   setUp(() {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
@@ -25,7 +25,7 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = DBBasicQuiries(db: dbhelper);
+    db = CompanyCRUD(db: dbhelper);
   });
 
   tearDown(() {

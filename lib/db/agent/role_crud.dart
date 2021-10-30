@@ -1,8 +1,8 @@
 import 'package:local_storage/models/agent/role.dart';
 import 'package:sqflite/sqflite.dart';
 
-class RoleQueries {
-  RoleQueries({required this.db});
+class RoleCRUD {
+  RoleCRUD({required this.db});
 
   final Future<Database> db;
 
