@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/db/db_strings.dart';
-import 'package:local_storage/db/title_quries.dart';
+import 'package:local_storage/db/agent/title_crud.dart';
 import 'package:local_storage/models/agent/title.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -13,7 +13,7 @@ Future main() async {
 
   JobTitle testTitle = JobTitle("name", "desc");
   late Future<Database> dbhelper;
-  late TitleBasicQueries db;
+  late TitleCRUD db;
 
   setUp(() async {
     dbhelper = openDatabase(inMemoryDatabasePath, version: 1,
@@ -25,7 +25,7 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = TitleBasicQueries(db: dbhelper);
+    db = TitleCRUD(db: dbhelper);
   });
 
   tearDown(() async {

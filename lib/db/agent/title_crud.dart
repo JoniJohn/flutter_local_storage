@@ -1,8 +1,8 @@
 import 'package:local_storage/models/agent/title.dart';
 import 'package:sqflite/sqflite.dart';
 
-class TitleBasicQueries {
-  TitleBasicQueries({required this.db});
+class TitleCRUD {
+  TitleCRUD({required this.db});
 
   final Future<Database> db;
 

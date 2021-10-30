@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/db/db_basic_quries.dart';
 import 'package:local_storage/db/db_strings.dart';
-import 'package:local_storage/db/role_quiries.dart';
+import 'package:local_storage/db/agent/role_crud.dart';
+import 'package:local_storage/db/organization/department_crud.dart';
+import 'package:local_storage/db/organization/organization_crud.dart';
 import 'package:local_storage/models/agent/role.dart';
 import 'package:local_storage/models/organization/company.dart';
 import 'package:local_storage/models/organization/department.dart';
@@ -19,7 +20,7 @@ Future main() async {
   late int deptID, coID;
 
   late Future<Database> dbhelper;
-  late RoleQueries db;
+  late RoleCRUD db;
 
   late Role role;
 
@@ -33,12 +34,13 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = RoleQueries(db: dbhelper);
-    DBBasicQuiries dbb = DBBasicQuiries(db: dbhelper);
+    db = RoleCRUD(db: dbhelper);
+    CompanyCRUD cDB = CompanyCRUD(db: dbhelper);
+    DeptCRUD dDB = DeptCRUD(db: dbhelper);
     company = Company("name", "country");
-    coID = await dbb.insertCompany(company);
+    coID = await cDB.insertCompany(company);
     dept = Department("name", "desc", coID);
-    deptID = await dbb.insertDept(dept);
+    deptID = await dDB.insertDept(dept);
     role = Role("name", "desc", deptID);
   });
 

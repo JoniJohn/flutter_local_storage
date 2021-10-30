@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/db/db_basic_quries.dart';
 import 'package:local_storage/db/db_strings.dart';
+import 'package:local_storage/db/organization/department_crud.dart';
+import 'package:local_storage/db/organization/organization_crud.dart';
 import 'package:local_storage/models/organization/company.dart';
 import 'package:local_storage/models/organization/department.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,7 +16,8 @@ Future main() async {
   Company company = Company('Flutter Co', 'BW');
   Department dept = Department('IT Dept', 'For your Support', null);
   late Future<Database> dbhelper;
-  late DBBasicQuiries db;
+  late CompanyCRUD cDB;
+  late DeptCRUD db;
   late int res;
 
   setUp(() async {
@@ -28,8 +30,9 @@ Future main() async {
     }, onConfigure: (db) async {
       await db.execute("PRAGMA foreign_keys = ON");
     });
-    db = DBBasicQuiries(db: dbhelper);
-    res = await db.insertCompany(company);
+    db = DeptCRUD(db: dbhelper);
+    cDB = CompanyCRUD(db: dbhelper);
+    res = await cDB.insertCompany(company);
     dept.company = res;
   });
 
